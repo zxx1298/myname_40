@@ -1,0 +1,62 @@
+<template>
+    <input
+    type="text"
+    class="inp"
+    :value="value"
+     @input="resinput"
+     @blur="resblur"
+    :class="{error:!statu,success:statu}"
+     >
+</template>
+
+<script>
+export default {
+  props: ['value', 'rules', 'msg_mis'],
+  data () {
+    return {
+      statu: false
+    }
+  },
+
+  methods: {
+    resinput (event) {
+      let value = event.target.value
+      if (this.rules) {
+        if (this.rules.test(value)) {
+          this.statu = true
+        } else {
+          this.statu = false
+        }
+      } else {
+        this.statu = !!value
+      }
+
+      this.$emit('input', value)
+    },
+    resblur (event) {
+      if (this.rules && !this.rules.test(event.target.value)) {
+        console.log(this.msg_mis)
+      }
+    }
+  }
+}
+</script>
+
+<style lang='less' scoped>
+    .inp{
+    width: 314*100vw/360;
+    height: 40*100vw/360;
+    border:none;
+    outline: none;
+    border-bottom: 2px solid rgb(117,117,117);
+    font-size: 18px;
+    margin: 5px 0;
+    background-color: transparent;
+}
+.error{
+    border-bottom-color:red;
+}
+.success{
+    border-bottom-color:green;
+}
+</style>

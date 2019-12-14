@@ -6,8 +6,8 @@
 export default {
   props: ['text'],
   methods: {
-    button_on () {
-      this.$emit('click')
+    button_on (event) {
+      this.$emit('click', event)
     }
   }
 }
