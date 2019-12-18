@@ -37,8 +37,8 @@ export default {
   data () {
     return {
       resur: {
-        username: '11111',
-        password: '123456'
+        username: '10086',
+        password: '123'
       }
     }
   },
@@ -53,6 +53,7 @@ export default {
         .then(res => {
           if (res.data.message === '登录成功') {
             localStorage.setItem('heima_40_token', res.data.data.token)
+            localStorage.setItem('heima_40_id', res.data.data.user.id)
             this.$router.push({ path: `Personal/${res.data.data.user.id}` })
             // console.log(111)
           } else {

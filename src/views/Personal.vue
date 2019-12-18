@@ -1,12 +1,12 @@
 <template>
   <div class="personal">
-    <router-link to="/edit_profile">
+    <router-link :to="`/editPersonal/`+currentUser.id">
       <div class="profile">
         <!-- $axios.defaults.baseURL读取axios的服务器路径 -->
-        <img src="http://img1.imgtn.bdimg.com/it/u=3757784226,1202878475&fm=26&gp=0.jpg" alt />
+        <img :src="currentUser.head_img" alt />
         <div class="profile-center">
           <div class="name">
-            <span class="iconfont iconxingbienan"></span>我就是我
+            <span class="iconfont iconxingbienan"></span>{{currentUser.nickname}}
           </div>
           <div class="time">2019-9-24</div>
         </div>
@@ -14,21 +14,56 @@
       </div>
     </router-link>
     <!-- <span>个人中心</span> -->
+    <mycell title="我的关注" crue='关注的用户' @click="$router.push({name:'Follow'})"></mycell>
+    <mycell title="我的跟帖" crue='跟帖/回复'></mycell>
+    <mycell title="我的收藏" crue='文章/视频' @click="$router.push({name:'collect'})"></mycell>
+    <mycell title="设置" crue=''></mycell>
+    <div class="eact">
+       <mybutton text="退出" class="exitBtn" @click="exitApp"></mybutton>
+    </div>
   </div>
 </template>
 
 <script>
 import { getuserInfo } from '@/api/users.js'
+import mycell from '@/components/my_cell.vue'
+import mybutton from '@/components/mybutton.vue'
 export default {
+  data () {
+    return {
+      currentUser: {}
+    }
+  },
+  components: {
+    mycell, mybutton
+  },
   mounted () {
     let id = this.$route.params.id
     getuserInfo(id)
       .then(res => {
         console.log(res)
+        if (res.data.message === '获取成功') {
+          this.currentUser = res.data.data
+          if (this.currentUser.head_img) {
+            this.currentUser.head_img = localStorage.getItem('heima_40_baseURL') + this.currentUser.head_img
+          } else {
+            console.log(123)
+            this.currentUser.head_img = localStorage.getItem('heima_40_baseURL') + '/uploads/image/IMG1569381163794.jpeg'
+          }
+        }
       })
       .catch(err => {
         console.log(err)
+        this.$toast.fail('获取失败')
       })
+  },
+  methods: {
+    exitApp () {
+      console.log(111)
+      localStorage.removeItem('heima_40_token')
+      localStorage.removeItem('heima_40_baseURL')
+      this.$router.push({ name: 'Index' })
+    }
   }
 }
 </script>
@@ -71,5 +106,8 @@ a{
     font-size: 14px;
     margin-top: 5px;
   }
+}
+/deep/.exitBtn {
+  margin: 50px auto !important;
 }
 </style>
