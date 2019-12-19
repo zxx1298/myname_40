@@ -20,15 +20,15 @@ export default {
 
 <style lang='less'  scoped>
 .cell{
-  height: 60*100vw/360;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #ccc;
-  margin: 0 15px;
-  .right{
-    color: #aaa;
-    font-size: 13px;
-  }
+    height: 60*100vw/360;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    padding: 0 15px;
+    > .right{
+        color: #aaa;
+        font-size: 13px;
+    }
 }
 </style>

@@ -2,44 +2,82 @@
   <div class="comment">
     <div class="addcomment" v-show='!isFocus'>
       <input type="text" placeholder="写跟帖" @focus="handlerFocus" />
-      <span class="comment">
+      <span class="comment" @click="$router.push({ path: `/commonts/${article.id}`})" >
         <i class="iconfont iconpinglun-"></i>
-        <em>100</em>
+        <em>{{article.comment_length}}</em>
       </span>
       <i class="iconfont iconshoucang" :class="{active:article.has_star}" @click="onStar"></i>
       <i class="iconfont iconfenxiang"></i>
     </div>
     <div class="inputcomment" v-show='isFocus'>
-        <textarea  ref='commtext' rows="5"></textarea>
+        <textarea  ref='commtext' rows="5" :placeholder="placeholder"></textarea>
         <div>
-            <span>发送</span>
-            <span @click='isFocus=false'>取消</span>
+            <span @click="send">发送</span>
+            <span @click='cancelReplay'>取消</span>
         </div>
     </div>
   </div>
 </template>
 
 <script>
-import { userStar } from '@/api/article.js'
+import { userStar, postComment } from '@/api/article.js'
 export default {
-  props: ['article'],
+  props: ['article', 'replayObj'],
   data () {
     return {
-      isFocus: false
+      isFocus: false,
+      placeholder: ''
+    }
+  },
+  watch: {
+    replayObj () {
+      if (this.replayObj) {
+        this.isFocus = true
+        // console.log(this.replayObj)
+        this.placeholder = '@' + this.replayObj.user.nickname
+      }
     }
   },
   methods: {
+    // 获取焦点时触发
     handlerFocus () {
-      this.isFocus = !this.isFocus
+      this.isFocus = true
       setTimeout(() => {
         this.$refs.commtext.focus()
       }, 1)
     },
+    // 收藏文章和取消文章收藏
     async onStar () {
       let res = await userStar(this.article.id)
       console.log(res)
       this.$toast.success(res.data.message)
       this.article.has_star = !this.article.has_star
+    },
+    // 取消评论
+    cancelReplay () {
+      this.isFocus = false
+      this.$refs.commtext.value = ''
+      this.$emit('resetValue')
+    },
+    async send () {
+      // 发表评论
+      let data = {
+        content: this.$refs.commtext.value
+      }
+      console.log(data)
+      // 判断是否回复某一条评论
+      if (this.replayObj) {
+        data.parent_id = this.replayObj.id
+      }
+      let res1 = await postComment(this.article.id, data)
+      console.log(res1)
+      if (res1.status === 200) {
+        this.isFocus = false
+        this.$toast.success(res1.data.message)
+        this.$refs.commtext.value = ''
+        // 通知父组件刷新数据
+        this.$emit('refresh')
+      }
     }
   }
 }
@@ -93,6 +131,9 @@ export default {
   left: 0;
   background-color: #fff;
   border-top: 1px solid #ddd;
+  .active{
+      color:red;
+  }
   > input {
     flex: 4;
     height: 30px;
@@ -102,9 +143,6 @@ export default {
     background-color: #eee;
     padding-left: 20px;
     font-size: 14px;
-  }
-  .active{
-      color:red;
   }
   i {
     font-size: 20px;
@@ -127,5 +165,4 @@ export default {
     flex: 1;
   }
 }
-
 </style>

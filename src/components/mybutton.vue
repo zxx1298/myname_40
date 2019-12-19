@@ -6,6 +6,7 @@
 export default {
   props: ['text'],
   methods: {
+    // 当被点击的时候，将事件传递给父组件，让父组件进行事件的相应
     button_on (event) {
       this.$emit('click', event)
     }

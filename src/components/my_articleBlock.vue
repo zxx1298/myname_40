@@ -1,48 +1,44 @@
 <template>
-<div @click="$router.push({path:`/articleDetail/${post.id}`})">
- <div class="single" v-if="post.cover.length <= 2 && post.type === 1">
-    <div class="left">
-      <p class="content">{{post.title}}</p>
-      <p class="info">
-        <span>{{post.user.nickname}}</span>
-        <span>{{post.comment_length}}跟帖</span>
-      </p>
-    </div>
-    <img :src="post.cover[0].url" alt />
-  </div>
- <div class="single1" v-else-if="post.cover.length > 2 && post.type === 1">
-    <div class="left">
-      <p class="content">{{post.title}}</p>
-        <div class="imgs">
-          <img v-for="item in post.cover" :key='item.id' :src="item.url" alt />
-        </div>
-      <p class="info">
-        <span>{{post.user.nickname}}</span>
-        <span>{{post.comment_length}}跟帖</span>
-      </p>
-    </div>
-
-  </div>
- <div class="single2" v-else-if="post.type === 2">
-    <div class="left">
-      <p class="content">{{post.title}}</p>
-         <div class="myvideo">
-      <img :src="post.cover[0].url" alt />
-      <div class="playbtn">
-        <van-icon name="play" />
+  <div @click="$router.push({path: `/articleDetail/${post.id}`})">
+    <div class="single" v-if="post.cover.length <= 2 && post.type === 1">
+      <div class="left">
+        <p class="content">{{post.title}}</p>
+        <p class="info">
+          <span>{{post.user.nickname}}</span>
+          <span>{{post.comment_length}}跟帖</span>
+        </p>
       </div>
+      <img :src="post.cover[0].url" alt />
     </div>
+    <div class="single1" v-else-if="post.cover.length > 2 && post.type === 1">
+      <p class="content" style="padding: 0px 5px;">{{post.title}}</p>
+      <div class="imgs">
+        <img v-for="item in post.cover" :key="item.id" :src="item.url" alt />
+      </div>
       <p class="info">
         <span>{{post.user.nickname}}</span>
         <span>{{post.comment_length}}跟帖</span>
       </p>
     </div>
-  </div>
+    <div class="single2" v-else-if="post.type === 2">
+      <p class="content" style="padding: 0px 5px;">{{post.title}}</p>
+      <div class="myvideo">
+        <img :src="post.cover[0].url" alt />
+        <div class="playbtn">
+          <van-icon name="play" />
+        </div>
+      </div>
+      <p class="info">
+        <span>{{post.user.nickname}}</span>
+        <span>{{post.comment_length}}跟帖</span>
+      </p>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
+  // post:当前需要渲染的新闻对象
   props: ['post']
 }
 </script>
@@ -79,6 +75,7 @@ body {
   text-overflow: ellipsis;
 }
 .single {
+  padding: 15px 0px;
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;

@@ -38,6 +38,8 @@ export default {
   },
   watch: {
     active () {
+      // 获取当前栏目的新闻数据，如新闻列表长度为0说明还没有获取过这个栏目的数据，那么就发起请求
+      // 如果已经有数据则无需再发请求
       if (this.cateList[this.active].postList.length === 0) { this.getpostList() }
     }
   },
@@ -48,19 +50,21 @@ export default {
     }
   },
   async mounted () {
+    // 获取所有栏目数据
     let res = await userCate()
     console.log(res)
     if (res.status === 200) {
       this.cateList = res.data.data
+      // 对数据进行改造，添加能够满足业务需求的成员
       this.cateList = this.cateList.map(value => {
         return {
           ...value,
-          postList: [],
-          pageIndex: 1,
-          pageSize: 5,
-          loading: false,
-          finished: false,
-          isLoading: false
+          postList: [], // 当前栏目的新闻列表数据
+          pageIndex: 1, // 当前栏目的页码
+          pageSize: 5, // 当前栏目每页所显示的新闻数据
+          loading: false, // 当前栏目更多数据加载状态，默认为不在加载数据
+          finished: false, // 数据是否已经完毕加载完毕，默认为没有完毕
+          isLoading: false// 标记是否处于下拉刷新的状态，默认为false
         }
       })
       this.getpostList()

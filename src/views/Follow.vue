@@ -31,6 +31,7 @@ export default {
     myheader
   },
   async mounted () {
+    // 获取用户关注列表
     let res = await getMyfollow()
     console.log(res)
     if (res.status === 200) {
@@ -41,6 +42,7 @@ export default {
     }
   },
   methods: {
+    // 取消关注
     async unFollow (id, index) {
       let res1 = await userUnfollow(id)
       console.log(res1)

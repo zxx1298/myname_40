@@ -52,8 +52,11 @@ export default {
       userLogin(this.resur)
         .then(res => {
           if (res.data.message === '登录成功') {
+            // 将当前的token存储，本地存储
             localStorage.setItem('heima_40_token', res.data.data.token)
+            // 存储用户ID
             localStorage.setItem('heima_40_id', res.data.data.user.id)
+            // 页面跳转
             this.$router.push({ path: `Personal/${res.data.data.user.id}` })
             // console.log(111)
           } else {
@@ -66,6 +69,7 @@ export default {
           this.$toast.fail('登录失败请重试')
         })
     },
+    // 处理文本框的输入
     resinput (data) {
       this.resur.username = data
     }

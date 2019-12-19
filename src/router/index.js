@@ -8,6 +8,7 @@ import Register from '@/views/register.vue'
 import ArticleDetail from '@/views/ArticleDetail.vue'
 import Follow from '@/views/Follow.vue'
 import collect from '@/views/collect.vue'
+import Commonts from '@/views/commonts.vue'
 
 Vue.use(VueRouter)
 
@@ -52,6 +53,11 @@ var router = new VueRouter({
       name: 'collect',
       path: '/collect',
       component: collect
+    },
+    {
+      name: 'Commonts',
+      path: '/commonts/:id',
+      component: Commonts
     }
   ]
 })
